@@ -55,11 +55,8 @@
 //    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 //};
 
-//static const Mesh mesh(":/cube.obj");
-//static const auto vertices = mesh.vertices();
-
 static const Cube cube;
-static const auto vertices = cube.vertices();
+static const auto cube_vertices = cube.vertices();
 
 
 Widget::Widget(QWidget *parent)
@@ -193,13 +190,22 @@ void Widget::wheelEvent(QWheelEvent *event)
 
 void Widget::initializeCubeGeometry()
 {
+    static const Mesh mesh(":/cube.obj");
+    static const auto mesh_vertices = mesh.vertices();
+
+    qCritical() << "!!!!!!!!!!";
+    qCritical() << cube_vertices;
+    qCritical() << "!!!!!!!!!!";
+    qCritical() << mesh_vertices;
+
+
     cubeVao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);
 
     cubeBuffer.create();
     cubeBuffer.bind();
     cubeBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    cubeBuffer.allocate(vertices.data(), vertices.size() * sizeof(Vertex));
+    cubeBuffer.allocate(mesh_vertices.data(), mesh_vertices.size() * sizeof(Vertex));
     //cubeBuffer.allocate(vertices, sizeof(vertices));
 
 
@@ -222,7 +228,7 @@ void Widget::initializeLampGeometry()
     lampBuffer.create();
     lampBuffer.bind();
     lampBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    lampBuffer.allocate(vertices.data(), vertices.size() * sizeof(Vertex));
+    lampBuffer.allocate(cube_vertices.data(), cube_vertices.size() * sizeof(Vertex));
 
     //  location, size(vec3), type, nomalize, stride(step), start position (offset)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*) 0);

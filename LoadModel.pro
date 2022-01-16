@@ -7,6 +7,7 @@ SOURCES += \
     cube.cpp \
     main.cpp \
     mesh.cpp \
+    vertex.cpp \
     widget.cpp
 
 HEADERS += \
