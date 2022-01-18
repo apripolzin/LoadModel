@@ -193,8 +193,7 @@ void Widget::wheelEvent(QWheelEvent *event)
 
 void Widget::initializeCubeGeometry()
 {
-    OBJModel model("C:\\Projects\\LoadModel\\monkey3.obj");
-    IndexedModel im = model.ToIndexedModel();
+    const IndexedModel im = OBJModel(":/monkey3.obj").ToIndexedModel();
     const auto mesh_vertices = im.toVerticesArray();
     const auto indices = im.indices;
     m_drawCount = im.indices.size();
@@ -207,7 +206,6 @@ void Widget::initializeCubeGeometry()
     cubeBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     cubeBuffer.allocate(mesh_vertices.data(), mesh_vertices.size() * sizeof(Vertex));
     //cubeBuffer.allocate(vertices, sizeof(vertices));
-
 
     //  location, size(vec3), type, nomalize, stride(step), start position (offset)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*) 0);

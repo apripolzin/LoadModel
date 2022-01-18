@@ -24,7 +24,7 @@ public:
     std::vector<QVector3D> normals;
     std::vector<unsigned int> indices;
     
-    std::vector<Vertex> toVerticesArray();
+    std::vector<Vertex> toVerticesArray() const;
     void CalcNormals();
 };
 
@@ -38,7 +38,7 @@ public:
     bool hasUVs;
     bool hasNormals;
     
-    OBJModel(const std::string& fileName);
+    OBJModel(const QString& fileName);
     
     IndexedModel ToIndexedModel();
 private:

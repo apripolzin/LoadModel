@@ -1,5 +1,6 @@
 #include "obj_loader.h"
-#include <fstream>
+#include <QFile>
+
 #include <iostream>
 #include <algorithm>
 #include <map>
@@ -10,19 +11,18 @@ static inline unsigned int ParseOBJIndexValue(const std::string& token, unsigned
 static inline float ParseOBJFloatValue(const std::string& token, unsigned int start, unsigned int end);
 static inline std::vector<std::string> SplitString(const std::string &s, char delim);
 
-OBJModel::OBJModel(const std::string& fileName)
+OBJModel::OBJModel(const QString &fileName)
 {
 	hasUVs = false;
 	hasNormals = false;
-    std::ifstream file;
-    file.open(fileName.c_str());
 
-    std::string line;
-    if(file.is_open())
+    QFile file(fileName);
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        while(file.good())
+        QTextStream in(&file);
+        while(!in.atEnd())
         {
-            getline(file, line);
+            const std::string line = in.readLine().toStdString();
         
             unsigned int lineLength = line.length();
             
@@ -50,11 +50,11 @@ OBJModel::OBJModel(const std::string& fileName)
     }
     else
     {
-        std::cerr << "Unable to load mesh: " << fileName << std::endl;
+        std::cerr << "Unable to load mesh: " << fileName.toStdString() << std::endl;
     }
 }
 
-std::vector<Vertex> IndexedModel::toVerticesArray()
+std::vector<Vertex> IndexedModel::toVerticesArray() const
 {
     std::vector<Vertex> rezult;
     for (int i = 0; i < positions.size(); ++i) {
