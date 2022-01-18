@@ -9,7 +9,8 @@ SOURCES += \
     main.cpp \
     mesh.cpp \
     vertex.cpp \
-    widget.cpp
+    widget.cpp \
+    obj_loader.cpp
 
 HEADERS += \
     camera.h \
@@ -17,7 +18,8 @@ HEADERS += \
     cube.h \
     mesh.h \
     vertex.h \
-    widget.h
+    widget.h \
+    obj_loader.h
 
 RESOURCES += \
     models.qrc \

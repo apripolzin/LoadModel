@@ -41,6 +41,8 @@ private:
     void drawLamp(const QVector3D &position);
 
     QOpenGLBuffer cubeBuffer;
+    QOpenGLBuffer indexBuffer;
+    int m_drawCount = 0;
     QOpenGLBuffer lampBuffer;
     QOpenGLVertexArrayObject cubeVao;
     QOpenGLVertexArrayObject lampVao;

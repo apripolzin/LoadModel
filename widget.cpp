@@ -10,6 +10,7 @@
 #include "cube.h"
 #include "cone.h"
 #include "mesh.h"
+#include "obj_loader.h"
 
 //static const float vertices[] = {
 //    // positions          // normals           // texture coords
@@ -63,6 +64,7 @@ static const auto cube_vertices = cube.vertices();
 Widget::Widget(QWidget *parent)
     : QOpenGLWidget(parent)
     , cubeBuffer(QOpenGLBuffer::VertexBuffer)
+    , indexBuffer(QOpenGLBuffer::IndexBuffer)
     , lampBuffer(QOpenGLBuffer::VertexBuffer)
 {
 }
@@ -191,8 +193,11 @@ void Widget::wheelEvent(QWheelEvent *event)
 
 void Widget::initializeCubeGeometry()
 {
-    static const Mesh mesh(":/cone.obj");
-    static const auto mesh_vertices = mesh.vertices();
+    OBJModel model("C:\\Projects\\LoadModel\\monkey3.obj");
+    IndexedModel im = model.ToIndexedModel();
+    const auto mesh_vertices = im.toVerticesArray();
+    const auto indices = im.indices;
+    m_drawCount = im.indices.size();
 
     cubeVao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);
@@ -213,6 +218,11 @@ void Widget::initializeCubeGeometry()
 
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
+
+    indexBuffer.create();
+    indexBuffer.bind();
+    indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    indexBuffer.allocate(indices.data(), sizeof(indices[0]) * indices.size());
 }
 
 void Widget::initializeLampGeometry()
@@ -328,7 +338,7 @@ void Widget::drawCube(const QVector3D &position, float angle)
 
     QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);
 
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawElements(GL_TRIANGLES, m_drawCount, GL_UNSIGNED_INT, 0);
     cubeProgram.release();
 }
 
