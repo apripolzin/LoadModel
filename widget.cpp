@@ -8,6 +8,7 @@
 #include <QElapsedTimer>
 
 #include "cube.h"
+#include "cone.h"
 #include "mesh.h"
 
 //static const float vertices[] = {
@@ -190,14 +191,8 @@ void Widget::wheelEvent(QWheelEvent *event)
 
 void Widget::initializeCubeGeometry()
 {
-    static const Mesh mesh(":/cube.obj");
+    static const Mesh mesh(":/cone.obj");
     static const auto mesh_vertices = mesh.vertices();
-
-    qCritical() << "!!!!!!!!!!";
-    qCritical() << cube_vertices;
-    qCritical() << "!!!!!!!!!!";
-    qCritical() << mesh_vertices;
-
 
     cubeVao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);

@@ -4,6 +4,7 @@ CONFIG += c++11
 
 SOURCES += \
     camera.cpp \
+    cone.cpp \
     cube.cpp \
     main.cpp \
     mesh.cpp \
@@ -12,6 +13,7 @@ SOURCES += \
 
 HEADERS += \
     camera.h \
+    cone.h \
     cube.h \
     mesh.h \
     vertex.h \

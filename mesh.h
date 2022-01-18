@@ -2,7 +2,6 @@
 #define MESH_H
 
 #include <QString>
-#include <QVector3D>
 #include <QList>
 
 #include "vertex.h"

@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>cube.obj</file>
+        <file>monkey3.obj</file>
+        <file>cone.obj</file>
     </qresource>
 </RCC>
