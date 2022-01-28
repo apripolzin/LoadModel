@@ -58,6 +58,8 @@ Mesh::Mesh(const QString &objfilename)
             }
         }
 
+        m_drawCount = faces.size();
+
         for (const Face &f : faces) {
             Vertex v = {vertices.at(f.vertex_index), vertex_normals.at(f.vertex_normal_index), texture_coords.at(f.vertex_texture_index)};
             m_vertices.push_back(v);
@@ -68,6 +70,11 @@ Mesh::Mesh(const QString &objfilename)
 QList<Vertex> Mesh::vertices() const
 {
     return m_vertices;
+}
+
+int Mesh::drawCount() const
+{
+    return m_drawCount;
 }
 
 QVector3D processVertex(const QString &line)

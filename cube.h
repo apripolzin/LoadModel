@@ -1,17 +1,16 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "vertex.h"
-#include <QList>
+#include "abstractmesh.h"
 
-class Cube
+class Cube : AbstractMesh
 {
 public:
     Cube();
     virtual ~Cube();
 
-    QList<Vertex> vertices() const;
-    int drawCount() const;
+    QList<Vertex> vertices() const override;
+    int drawCount() const override;
 
 private:
     QList<Vertex> m_vertices;

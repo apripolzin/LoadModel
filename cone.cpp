@@ -231,3 +231,8 @@ QList<Vertex> Cone::vertices() const
 {
     return m_vertices;
 }
+
+int Cone::drawCount() const
+{
+    return _faces.count();
+}

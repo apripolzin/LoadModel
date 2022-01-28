@@ -3,6 +3,7 @@ QT += core gui widgets opengl openglwidgets
 CONFIG += c++11
 
 SOURCES += \
+    abstractmesh.cpp \
     camera.cpp \
     cone.cpp \
     cube.cpp \
@@ -13,6 +14,7 @@ SOURCES += \
     obj_loader.cpp
 
 HEADERS += \
+    abstractmesh.h \
     camera.h \
     cone.h \
     cube.h \

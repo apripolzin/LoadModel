@@ -1,17 +1,16 @@
 #ifndef CONE_H
 #define CONE_H
 
-#include "vertex.h"
-#include <QList>
+#include "abstractmesh.h"
 
-class Cone
+class Cone : public AbstractMesh
 {
 public:
     Cone();
     virtual ~Cone();
 
-    QList<Vertex> vertices() const;
-
+    QList<Vertex> vertices() const override;
+    virtual int drawCount() const override;
 private:
     QList<Vertex> m_vertices;
 };
