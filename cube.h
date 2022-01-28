@@ -11,6 +11,7 @@ public:
     virtual ~Cube();
 
     QList<Vertex> vertices() const;
+    int drawCount() const;
 
 private:
     QList<Vertex> m_vertices;

@@ -1,4 +1,5 @@
 #include "widget.h"
+
 #include <QImage>
 #include <QOpenGLTexture>
 #include <QMatrix4x4>
@@ -12,67 +13,20 @@
 #include "mesh.h"
 #include "obj_loader.h"
 
-//static const float vertices[] = {
-//    // positions          // normals           // texture coords
-//    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-//     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-//     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-//     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-//    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-//    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-
-//    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-//     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-//     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-//     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-//    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-//    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-
-//    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-//    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-//    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-//    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-//    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-//    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-//     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-//     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-//     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-//     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-//     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-//     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-//    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-//     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-//     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-//     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-//    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-//    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-
-//    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-//     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-//     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-//     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-//    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-//    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-//};
-
-static const Cube cube;
-static const auto cube_vertices = cube.vertices();
 
 
 Widget::Widget(QWidget *parent)
     : QOpenGLWidget(parent)
-    , cubeBuffer(QOpenGLBuffer::VertexBuffer)
-    , indexBuffer(QOpenGLBuffer::IndexBuffer)
-    , lampBuffer(QOpenGLBuffer::VertexBuffer)
+    , meshVertexBuffer(QOpenGLBuffer::VertexBuffer)
+    , meshIndexBuffer(QOpenGLBuffer::IndexBuffer)
+    , lampVertexBuffer(QOpenGLBuffer::VertexBuffer)
 {
 }
 
 Widget::~Widget()
 {
-    cubeBuffer.destroy();
-    lampBuffer.destroy();
+    meshVertexBuffer.destroy();
+    lampVertexBuffer.destroy();
 }
 
 void Widget::initializeGL()
@@ -81,7 +35,7 @@ void Widget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-    initializeCubeGeometry();
+    initializeMeshGeometry();
     initializeLampGeometry();
     initializeShaders();
 
@@ -100,7 +54,7 @@ void Widget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     camera.update();
 
-    static constexpr QVector3D cubePositions[] = {
+    static constexpr QVector3D meshPositions[] = {
         QVector3D( 0.0f,  0.0f,  0.0f),
 //        QVector3D( 2.0f,  5.0f, -15.0f),
 //        QVector3D(-1.5f, -2.2f, -2.5f),
@@ -113,10 +67,10 @@ void Widget::paintGL()
 //        QVector3D(-1.3f,  1.0f, -1.5f)
     };
     int i = 0;
-    for (const auto &position : cubePositions) {
+    for (const auto &position : meshPositions) {
         const float angle =  20.0f * i;
         ++i;
-        drawCube(position, angle);
+        drawMesh(position, angle);
     }
     for (const auto &position : lightPositions) {
         drawLamp(position);
@@ -191,21 +145,20 @@ void Widget::wheelEvent(QWheelEvent *event)
     QWidget::wheelEvent(event);
 }
 
-void Widget::initializeCubeGeometry()
+void Widget::initializeMeshGeometry()
 {
     const IndexedModel im = OBJModel(":/monkey3.obj").ToIndexedModel();
     const auto mesh_vertices = im.toVerticesArray();
     const auto indices = im.indices;
-    m_drawCount = im.indices.size();
+    m_meshDrawCount = im.indices.size();
 
-    cubeVao.create();
-    QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);
+    meshVao.create();
+    QOpenGLVertexArrayObject::Binder vaoBinder(&meshVao);
 
-    cubeBuffer.create();
-    cubeBuffer.bind();
-    cubeBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    cubeBuffer.allocate(mesh_vertices.data(), mesh_vertices.size() * sizeof(Vertex));
-    //cubeBuffer.allocate(vertices, sizeof(vertices));
+    meshVertexBuffer.create();
+    meshVertexBuffer.bind();
+    meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    meshVertexBuffer.allocate(mesh_vertices.data(), mesh_vertices.size() * sizeof(Vertex));
 
     //  location, size(vec3), type, nomalize, stride(step), start position (offset)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*) 0);
@@ -217,21 +170,25 @@ void Widget::initializeCubeGeometry()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
-    indexBuffer.create();
-    indexBuffer.bind();
-    indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    indexBuffer.allocate(indices.data(), sizeof(indices[0]) * indices.size());
+    meshIndexBuffer.create();
+    meshIndexBuffer.bind();
+    meshIndexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    meshIndexBuffer.allocate(indices.data(), sizeof(indices[0]) * indices.size());
 }
 
 void Widget::initializeLampGeometry()
 {
+    static const Cube cube;
+    static const auto cube_vertices = cube.vertices();
+    m_lampDrawCount = cube.drawCount();
+
     lampVao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&lampVao);
 
-    lampBuffer.create();
-    lampBuffer.bind();
-    lampBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    lampBuffer.allocate(cube_vertices.data(), cube_vertices.size() * sizeof(Vertex));
+    lampVertexBuffer.create();
+    lampVertexBuffer.bind();
+    lampVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    lampVertexBuffer.allocate(cube_vertices.data(), cube_vertices.size() * sizeof(Vertex));
 
     //  location, size(vec3), type, nomalize, stride(step), start position (offset)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*) 0);
@@ -240,9 +197,9 @@ void Widget::initializeLampGeometry()
 
 void Widget::initializeShaders()
 {
-    if (!cubeProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vcube.vsh")
-            || !cubeProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fcube.fsh")
-            || !cubeProgram.link()) {
+    if (!meshProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vcube.vsh")
+            || !meshProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fcube.fsh")
+            || !meshProgram.link()) {
         qCritical() << "Shader error";
         close();
     }
@@ -272,9 +229,9 @@ QOpenGLTexture *Widget::initializeTexture(const QString &path)
 }
 
 
-void Widget::drawCube(const QVector3D &position, float angle)
+void Widget::drawMesh(const QVector3D &position, float angle)
 {
-    cubeProgram.bind();
+    meshProgram.bind();
 
     QMatrix4x4 model;
     model.translate(position);
@@ -282,10 +239,10 @@ void Widget::drawCube(const QVector3D &position, float angle)
     QMatrix4x4 view = camera.view();
     QMatrix4x4 projection = camera.projection();
 
-    cubeProgram.setUniformValue("model", model);
-    cubeProgram.setUniformValue("view", view);
-    cubeProgram.setUniformValue("projection", projection);
-    cubeProgram.setUniformValue("viewPos", camera.position());
+    meshProgram.setUniformValue("model", model);
+    meshProgram.setUniformValue("view", view);
+    meshProgram.setUniformValue("projection", projection);
+    meshProgram.setUniformValue("viewPos", camera.position());
 
     glActiveTexture(GL_TEXTURE0);
     container->bind();
@@ -293,51 +250,50 @@ void Widget::drawCube(const QVector3D &position, float angle)
     container_specular->bind();
 
     // material
-    cubeProgram.setUniformValue("material.diffuse",  0);
-    cubeProgram.setUniformValue("material.specular", 1);
-    cubeProgram.setUniformValue("material.shininess", 32.0f);
+    meshProgram.setUniformValue("material.diffuse",  0);
+    meshProgram.setUniformValue("material.specular", 1);
+    meshProgram.setUniformValue("material.shininess", 32.0f);
 
     //direct light
-    cubeProgram.setUniformValue("dirLight.ambient", QVector3D(0.2f, 0.2f, 0.2f));
-    cubeProgram.setUniformValue("dirLight.diffuse", QVector3D(0.5f, 0.5f, 0.5f));
-    cubeProgram.setUniformValue("dirLight.specular", QVector3D(1.0f, 1.0f, 1.0f));
-    cubeProgram.setUniformValue("dirLight.direction", QVector3D(-0.2f, -1.0f, -0.3f));
+    meshProgram.setUniformValue("dirLight.ambient", QVector3D(0.2f, 0.2f, 0.2f));
+    meshProgram.setUniformValue("dirLight.diffuse", QVector3D(0.5f, 0.5f, 0.5f));
+    meshProgram.setUniformValue("dirLight.specular", QVector3D(1.0f, 1.0f, 1.0f));
+    meshProgram.setUniformValue("dirLight.direction", QVector3D(-0.2f, -1.0f, -0.3f));
 
     //point light
     int i = 0;
     for (const QVector3D &lightPosition : lightPositions) {
         const QByteArray prefix = QString("pointLight[%1]").arg(i).toUtf8(); ++i;
 
-        cubeProgram.setUniformValue(prefix + ".position", lightPosition);
+        meshProgram.setUniformValue(prefix + ".position", lightPosition);
 
-        cubeProgram.setUniformValue(prefix + ".ambient", QVector3D(0.2f, 0.2f, 0.2f));
-        cubeProgram.setUniformValue(prefix + ".diffuse", QVector3D(0.5f, 0.5f, 0.5f));
-        cubeProgram.setUniformValue(prefix + ".specular", QVector3D(1.0f, 1.0f, 1.0f));
+        meshProgram.setUniformValue(prefix + ".ambient", QVector3D(0.2f, 0.2f, 0.2f));
+        meshProgram.setUniformValue(prefix + ".diffuse", QVector3D(0.5f, 0.5f, 0.5f));
+        meshProgram.setUniformValue(prefix + ".specular", QVector3D(1.0f, 1.0f, 1.0f));
 
-        cubeProgram.setUniformValue(prefix + ".constant", 1.0f);
-        cubeProgram.setUniformValue(prefix + ".linear", 0.09f);
-        cubeProgram.setUniformValue(prefix + ".quadratic", 0.032f);
+        meshProgram.setUniformValue(prefix + ".constant", 1.0f);
+        meshProgram.setUniformValue(prefix + ".linear", 0.09f);
+        meshProgram.setUniformValue(prefix + ".quadratic", 0.032f);
     }
 
-
     // spot light
-    cubeProgram.setUniformValue("spotLight.position",  camera.position());
-    cubeProgram.setUniformValue("spotLight.direction", camera.front());
-    cubeProgram.setUniformValue("spotLight.cutOff",   qCos(qDegreesToRadians(12.5f)));
-    cubeProgram.setUniformValue("spotLight.outerCutOff", qCos(qDegreesToRadians(17.5f)));
+    meshProgram.setUniformValue("spotLight.position",  camera.position());
+    meshProgram.setUniformValue("spotLight.direction", camera.front());
+    meshProgram.setUniformValue("spotLight.cutOff",   qCos(qDegreesToRadians(12.5f)));
+    meshProgram.setUniformValue("spotLight.outerCutOff", qCos(qDegreesToRadians(17.5f)));
 
-    cubeProgram.setUniformValue("spotLight.ambient", 0.2f, 0.2f, 0.2f);
-    cubeProgram.setUniformValue("spotLight.diffuse", 0.5f, 0.5f, 0.5f); // darken the light a bit to fit the scene
-    cubeProgram.setUniformValue("spotLight.specular", 1.0f, 1.0f, 1.0f);
+    meshProgram.setUniformValue("spotLight.ambient", 0.2f, 0.2f, 0.2f);
+    meshProgram.setUniformValue("spotLight.diffuse", 0.5f, 0.5f, 0.5f); // darken the light a bit to fit the scene
+    meshProgram.setUniformValue("spotLight.specular", 1.0f, 1.0f, 1.0f);
 
-    cubeProgram.setUniformValue("spotLight.constant",  1.0f);
-    cubeProgram.setUniformValue("spotLight.linear",    0.09f);
-    cubeProgram.setUniformValue("spotLight.quadratic", 0.032f);
+    meshProgram.setUniformValue("spotLight.constant",  1.0f);
+    meshProgram.setUniformValue("spotLight.linear",    0.09f);
+    meshProgram.setUniformValue("spotLight.quadratic", 0.032f);
 
-    QOpenGLVertexArrayObject::Binder vaoBinder(&cubeVao);
+    QOpenGLVertexArrayObject::Binder vaoBinder(&meshVao);
 
-    glDrawElements(GL_TRIANGLES, m_drawCount, GL_UNSIGNED_INT, 0);
-    cubeProgram.release();
+    glDrawElements(GL_TRIANGLES, m_meshDrawCount, GL_UNSIGNED_INT, 0);
+    meshProgram.release();
 }
 
 void Widget::drawLamp(const QVector3D &position)
@@ -356,7 +312,7 @@ void Widget::drawLamp(const QVector3D &position)
     lampProgram.setUniformValue("projection", projection);
 
     QOpenGLVertexArrayObject::Binder vaoBinder(&lampVao);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, m_lampDrawCount);
 
     lampProgram.release();
 }

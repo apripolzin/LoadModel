@@ -31,23 +31,30 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 
 private:
-    void initializeCubeGeometry();
+    void initializeMeshGeometry();
     void initializeLampGeometry();
+
     void initializeShaders();
+
     QOpenGLTexture *initializeTexture(const QString &path);
 
-
-    void drawCube(const QVector3D &position, float angle);
+    void drawMesh(const QVector3D &position, float angle);
     void drawLamp(const QVector3D &position);
 
-    QOpenGLBuffer cubeBuffer;
-    QOpenGLBuffer indexBuffer;
-    int m_drawCount = 0;
-    QOpenGLBuffer lampBuffer;
-    QOpenGLVertexArrayObject cubeVao;
+    QOpenGLBuffer meshVertexBuffer;
+    QOpenGLBuffer meshIndexBuffer;
+
+    int m_meshDrawCount = 0;
+    int m_lampDrawCount = 0;
+
+    QOpenGLBuffer lampVertexBuffer;
+
+    QOpenGLVertexArrayObject meshVao;
     QOpenGLVertexArrayObject lampVao;
-    QOpenGLShaderProgram cubeProgram;
+
+    QOpenGLShaderProgram meshProgram;
     QOpenGLShaderProgram lampProgram;
+
     QOpenGLTexture *container = nullptr;
     QOpenGLTexture *container_specular = nullptr;
 

@@ -79,3 +79,8 @@ QList<Vertex> Cube::vertices() const
     return m_vertices;
 
 }
+
+int Cube::drawCount() const
+{
+    return _faces.size();
+}
