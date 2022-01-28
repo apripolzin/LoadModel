@@ -13,8 +13,6 @@
 #include "mesh.h"
 #include "obj_loader.h"
 
-
-
 Widget::Widget(QWidget *parent)
     : QOpenGLWidget(parent)
     , meshVertexBuffer(QOpenGLBuffer::VertexBuffer)
@@ -56,15 +54,15 @@ void Widget::paintGL()
 
     static constexpr QVector3D meshPositions[] = {
         QVector3D( 0.0f,  0.0f,  0.0f),
-//        QVector3D( 2.0f,  5.0f, -15.0f),
-//        QVector3D(-1.5f, -2.2f, -2.5f),
-//        QVector3D(-3.8f, -2.0f, -12.3f),
-//        QVector3D( 2.4f, -0.4f, -3.5f),
-//        QVector3D(-1.7f,  3.0f, -7.5f),
-//        QVector3D( 1.3f, -2.0f, -2.5f),
-//        QVector3D( 1.5f,  2.0f, -2.5f),
-//        QVector3D( 1.5f,  0.2f, -1.5f),
-//        QVector3D(-1.3f,  1.0f, -1.5f)
+        QVector3D( 2.0f,  5.0f, -15.0f),
+        QVector3D(-1.5f, -2.2f, -2.5f),
+        QVector3D(-3.8f, -2.0f, -12.3f),
+        QVector3D( 2.4f, -0.4f, -3.5f),
+        QVector3D(-1.7f,  3.0f, -7.5f),
+        QVector3D( 1.3f, -2.0f, -2.5f),
+        QVector3D( 1.5f,  2.0f, -2.5f),
+        QVector3D( 1.5f,  0.2f, -1.5f),
+        QVector3D(-1.3f,  1.0f, -1.5f)
     };
     int i = 0;
     for (const auto &position : meshPositions) {
@@ -178,9 +176,9 @@ void Widget::initializeMeshGeometry()
 
 void Widget::initializeLampGeometry()
 {
-    static const Cube cube;
-    static const auto cube_vertices = cube.vertices();
-    m_lampDrawCount = cube.drawCount();
+    static const Mesh lamp(":/monkey.obj");
+    static const auto lamp_vertices = lamp.vertices();
+    m_lampDrawCount = lamp.drawCount();
 
     lampVao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&lampVao);
@@ -188,7 +186,7 @@ void Widget::initializeLampGeometry()
     lampVertexBuffer.create();
     lampVertexBuffer.bind();
     lampVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    lampVertexBuffer.allocate(cube_vertices.data(), cube_vertices.size() * sizeof(Vertex));
+    lampVertexBuffer.allocate(lamp_vertices.data(), lamp_vertices.size() * sizeof(Vertex));
 
     //  location, size(vec3), type, nomalize, stride(step), start position (offset)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*) 0);
